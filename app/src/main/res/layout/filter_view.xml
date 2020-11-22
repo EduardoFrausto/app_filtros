@@ -1,20 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/redSlider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:value="0"
+        android:valueFrom="0"
+        android:valueTo="8"
+        android:visibility="gone"
+        app:haloColor="@color/red_slider_inactive"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:thumbColor="@color/red_slider_active"
+        app:trackColorActive="@color/red_slider_active"
+        app:trackColorInactive="@color/red_slider_inactive"
+        tools:visibility="visible" />
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/greenSlider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:value="0"
+        android:valueFrom="0"
+        android:valueTo="8"
+        android:visibility="gone"
+        app:haloColor="@color/gree_slider_inactive"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/redSlider"
+        app:thumbColor="@color/green_slider_active"
+        app:trackColorActive="@color/green_slider_active"
+        app:trackColorInactive="@color/gree_slider_inactive"
+        tools:visibility="visible" />
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/blueSlider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:value="0"
+        android:valueFrom="0"
+        android:valueTo="8"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/greenSlider"
+        tools:visibility="visible" />
 
     <com.google.android.material.slider.Slider
         android:id="@+id/slider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:valueFrom="-100"
         android:value="0"
+        android:valueFrom="-100"
         android:valueTo="100"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/blueSlider"
+        tools:visibility="visible" />
 
     <HorizontalScrollView
         android:id="@+id/scrollView"

@@ -52,6 +52,13 @@ class SelectFilterActivity : AppCompatActivity() {
                                 binding.imageView2.setImageBitmap(bitmapCopy)
                             }
                         }
+                        GAMMA -> {
+                            bitmapCopy =
+                                viewModel.applyGamma(_bitmapOriginal, 0.6f, 0.6f, 0.6f)
+                            withContext(Dispatchers.Main) {
+                                binding.imageView2.setImageBitmap(bitmapCopy)
+                            }
+                        }
                         else -> {
                         }
                     }
@@ -61,7 +68,7 @@ class SelectFilterActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onStop(filter: Filter, value: Int) {
+            override fun onStop(filter: Filter, value: Float) {
                 lifecycleScope.launch(Dispatchers.IO) {
                     withContext(Dispatchers.Main) {
                         binding.filters.disableAll()
@@ -96,8 +103,18 @@ class SelectFilterActivity : AppCompatActivity() {
                 }
             }
 
+            override fun gamma(red: Float, green: Float, blue: Float) {
+                lifecycleScope.launch(Dispatchers.IO) {
+                    withContext(Dispatchers.Main) {
+                        binding.filters.disableAll()
+                    }
+                    val bitmapCopy: Bitmap = viewModel.applyGamma(_bitmapOriginal, red, green, blue)
+                    withContext(Dispatchers.Main) {
+                        binding.imageView2.setImageBitmap(bitmapCopy)
+                        binding.filters.enableAll()
+                    }
+                }
+            }
         }
     }
-
-
 }

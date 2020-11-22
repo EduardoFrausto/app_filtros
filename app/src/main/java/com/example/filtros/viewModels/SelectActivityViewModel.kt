@@ -5,14 +5,20 @@ import android.R.attr.x
 import android.R.attr.y
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.filtros.filterView.Filter
 import com.example.filtros.models.PixelModel
+import kotlin.math.pow
 
 
 class SelectActivityViewModel : ViewModel() {
 
-    fun applyFilter(bitmap: Bitmap, filter: Filter, value: Int = 0): Bitmap {
+    private val redGamma = IntArray(256)
+    private val greenGamma = IntArray(256)
+    private val blueGamma = IntArray(256)
+
+    fun applyFilter(bitmap: Bitmap, filter: Filter, value: Float = 0f): Bitmap {
         var pixelModel: PixelModel
         val bitmapCopy = Bitmap.createBitmap(bitmap.width, bitmap.height, bitmap.config)
         for (i in 0 until bitmap.width) {
@@ -49,9 +55,9 @@ class SelectActivityViewModel : ViewModel() {
                         )
                     }
                     Filter.BRILLO -> {
-                        pixelModel.green += value
-                        pixelModel.blue += value
-                        pixelModel.red += value
+                        pixelModel.green += value.toInt()
+                        pixelModel.blue += value.toInt()
+                        pixelModel.red += value.toInt()
                         bitmapCopy.setPixel(
                             i, j,
                             Color.argb(
@@ -63,7 +69,7 @@ class SelectActivityViewModel : ViewModel() {
                         )
                     }
                     Filter.CONTRASTE -> {
-                        var contrast = (100f + value.toFloat()) / 100f
+                        var contrast = (100f + value) / 100f
                         contrast *= contrast
                         bitmapCopy.setPixel(
                             i, j,
@@ -125,17 +131,46 @@ class SelectActivityViewModel : ViewModel() {
         return checkRange(newColor.toInt())
     }
 
+    private fun setGammaChannels(red: Double, green: Double, blue: Double) {
+        val redFixed = if (red != 0.0) red else 1.0
+        val greenFixed = if (green != 0.0) green else 1.0
+        val blueFixed = if (blue != 0.0) blue else 1.0
+        for (i in 0 until 256) {
+            redGamma[i] =
+                255.coerceAtMost(((255.0 * (i / 255.0).pow(1.0 / redFixed)) + 0.5).toInt())
+            greenGamma[i] =
+                255.coerceAtMost(((255.0 * (i / 255.0).pow(1.0 / greenFixed)) + 0.5).toInt())
+            blueGamma[i] =
+                255.coerceAtMost(((255.0 * (i / 255.0).pow(1.0 / blueFixed)) + 0.5).toInt())
+        }
+    }
+
+    fun applyGamma(bitmap: Bitmap, red: Float, green: Float, blue: Float): Bitmap {
+        var pixelModel: PixelModel
+        val bitmapCopy = Bitmap.createBitmap(bitmap.width, bitmap.height, bitmap.config)
+        setGammaChannels(red.toDouble(), green.toDouble(), blue.toDouble())
+        for (i in 0 until bitmap.width) {
+            for (j in 0 until bitmap.height) {
+                pixelModel = PixelModel.fromPixel(bitmap.getPixel(i, j))
+                bitmapCopy.setPixel(
+                    i, j,
+                    Color.argb(
+                        pixelModel.alpha,
+                        redGamma[pixelModel.red],
+                        greenGamma[pixelModel.green],
+                        blueGamma[pixelModel.blue],
+                    )
+                )
+            }
+        }
+        return bitmapCopy
+    }
+
     private fun checkRange(value: Int): Int {
         return when {
-            value > 255 -> {
-                255
-            }
-            value < 0 -> {
-                0
-            }
-            else -> {
-                value
-            }
+            value > 255 -> 255
+            value < 0 -> 0
+            else -> value
         }
     }
 }

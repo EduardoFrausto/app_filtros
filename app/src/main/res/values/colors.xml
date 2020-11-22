@@ -7,4 +7,8 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="red_slider_active">#E30425</color>
+    <color name="red_slider_inactive">#61E30425</color>
+    <color name="green_slider_active">#008B00</color>
+    <color name="gree_slider_inactive">#61008B00</color>
 </resources>

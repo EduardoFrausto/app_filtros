@@ -1,7 +1,9 @@
 package com.example.filtros.filterView
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.Color
+import android.opengl.Visibility
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
@@ -31,6 +33,11 @@ class FiltersView : ScrollView {
     private lateinit var meanRemoval: Button
     private lateinit var embossing: Button
     private lateinit var edgeDetection: Button
+
+    private lateinit var sliderRed: Slider
+    private lateinit var sliderGreen: Slider
+    private lateinit var sliderBlue: Slider
+
     private lateinit var slider: Slider
 
     var selected: Filter = NORMAL
@@ -76,99 +83,151 @@ class FiltersView : ScrollView {
         embossing = findViewById(R.id.buttonEmbossing)
         edgeDetection = findViewById(R.id.buttonEdgeDetection)
         slider = findViewById(R.id.slider)
+        sliderGreen = findViewById(R.id.greenSlider)
+        sliderRed = findViewById(R.id.redSlider)
+        sliderBlue = findViewById(R.id.blueSlider)
         addListeners()
     }
 
     private fun addListeners() {
         if (listener != null) {
-            slider.value = 0f
             normal.setOnClickListener {
-                slider.visibility = View.GONE
+                configSlider()
                 listener!!.onClick(NORMAL)
                 changeStyle(it as Button)
             }
             negativo.setOnClickListener {
-                slider.visibility = View.GONE
+                configSlider()
                 listener!!.onClick(NEGATIVO)
                 changeStyle(it as Button)
             }
             grises.setOnClickListener {
-                slider.visibility = View.GONE
+                configSlider()
                 listener!!.onClick(GRISES)
                 changeStyle(it as Button)
             }
             brillo.setOnClickListener {
-                slider.visibility = View.VISIBLE
+                configSlider(View.VISIBLE)
                 listener!!.onClick(BRILLO)
                 changeStyle(it as Button)
             }
             contraste.setOnClickListener {
-                slider.visibility = View.VISIBLE
+                configSlider(View.VISIBLE)
                 listener!!.onClick(CONTRASTE)
                 changeStyle(it as Button)
             }
             gamma.setOnClickListener {
-                slider.visibility = View.VISIBLE
-                listener!!.onClick(GAMMA)
+                configSlider()
+                sliderGreen.visibility = View.VISIBLE
+                sliderGreen.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+                    override fun onStartTrackingTouch(slider: Slider) {}
+                    override fun onStopTrackingTouch(slider: Slider) {
+                        listener!!.gamma(
+                            red = sliderRed.value,
+                            green = sliderGreen.value,
+                            blue = sliderBlue.value
+                        )
+                    }
+                })
+                sliderRed.visibility = View.VISIBLE
+                sliderRed.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+                    override fun onStartTrackingTouch(slider: Slider) {}
+                    override fun onStopTrackingTouch(slider: Slider) {
+                        listener!!.gamma(
+                            red = sliderRed.value,
+                            green = sliderGreen.value,
+                            blue = sliderBlue.value
+                        )
+                    }
+                })
+                sliderBlue.visibility = View.VISIBLE
+                sliderBlue.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+                    override fun onStartTrackingTouch(slider: Slider) {}
+                    override fun onStopTrackingTouch(slider: Slider) {
+                        listener!!.gamma(
+                            red = sliderRed.value,
+                            green = sliderGreen.value,
+                            blue = sliderBlue.value
+                        )
+                    }
+                })
+                listener!!.gamma(
+                    red = sliderRed.value,
+                    green = sliderGreen.value,
+                    blue = slider.value
+                )
                 changeStyle(it as Button)
             }
             verde.setOnClickListener {
-                slider.visibility = View.GONE
+                configSlider()
                 listener!!.onClick(VERDE)
                 changeStyle(it as Button)
             }
             rojo.setOnClickListener {
-                slider.visibility = View.GONE
+                configSlider()
                 listener!!.onClick(ROJO)
                 changeStyle(it as Button)
             }
             azul.setOnClickListener {
-                slider.visibility = View.GONE
+                configSlider()
                 listener!!.onClick(AZUL)
                 changeStyle(it as Button)
             }
             smoothing.setOnClickListener {
-                slider.visibility = View.GONE
+                configSlider()
                 listener!!.onClick(SMOOTHING)
                 changeStyle(it as Button)
             }
             gaussianBlur.setOnClickListener {
-                slider.visibility = View.GONE
+                configSlider()
                 listener!!.onClick(GAUSSIAN_BLUR)
                 changeStyle(it as Button)
             }
             sharpen.setOnClickListener {
-                slider.visibility = View.GONE
+                configSlider()
                 listener!!.onClick(SHARPEN)
                 changeStyle(it as Button)
             }
             meanRemoval.setOnClickListener {
-                slider.visibility = View.GONE
+                configSlider()
                 listener!!.onClick(MEAN_REMOVAL)
                 changeStyle(it as Button)
             }
             embossing.setOnClickListener {
-                slider.visibility = View.GONE
+                configSlider()
                 listener!!.onClick(EMBOSSING)
                 changeStyle(it as Button)
             }
             edgeDetection.setOnClickListener {
-                slider.visibility = View.GONE
+                configSlider()
                 listener!!.onClick(EDGE_DETECTION)
                 changeStyle(it as Button)
             }
-            slider.setLabelFormatter {
-                it.toInt().toString()
-            }
             slider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
                 override fun onStartTrackingTouch(slider: Slider) {}
-
                 override fun onStopTrackingTouch(slider: Slider) {
-                    listener!!.onStop(selected, slider.value.toInt())
+                    listener!!.onStop(selected, slider.value)
                 }
 
             })
         }
+    }
+
+    private fun configSlider(
+        visibility: Int = View.GONE,
+        valueFrom: Float = -100f,
+        valueTo: Float = 100f
+    ) {
+        sliderGreen.visibility = View.GONE
+        sliderBlue.visibility = View.GONE
+        sliderRed.visibility = View.GONE
+        slider.visibility = visibility
+        slider.value = 0f
+        slider.setLabelFormatter {
+            it.toInt().toString()
+        }
+        slider.valueFrom = valueFrom
+        slider.valueTo = valueTo
     }
 
     fun disableAll() {
@@ -265,6 +324,7 @@ class FiltersView : ScrollView {
 
     interface FilterViewListener {
         fun onClick(filter: Filter)
-        fun onStop(filter: Filter, value: Int)
+        fun onStop(filter: Filter, value: Float)
+        fun gamma(red: Float, green: Float, blue: Float)
     }
 }
