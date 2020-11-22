@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/slider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:valueFrom="-100"
+        android:value="0"
+        android:valueTo="100"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <HorizontalScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/slider">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingVertical="2dp">
+
+            <Button
+                android:id="@+id/buttonNormal"
+                style="@style/FilterSelected"
+                android:text="@string/text_normal"
+                app:layout_constraintEnd_toStartOf="@+id/buttonNegativo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/buttonNegativo"
+                style="@style/FilterOutline"
+                android:text="@string/text_negativo"
+                app:layout_constraintEnd_toStartOf="@+id/buttonGrises"
+                app:layout_constraintStart_toEndOf="@+id/buttonNormal"
+                app:layout_constraintTop_toTopOf="@id/buttonNormal" />
+
+            <Button
+                android:id="@+id/buttonGrises"
+                style="@style/FilterOutline"
+                android:text="@string/text_grises"
+                app:layout_constraintEnd_toStartOf="@+id/buttonBrillo"
+                app:layout_constraintStart_toEndOf="@+id/buttonNegativo"
+                app:layout_constraintTop_toTopOf="@id/buttonNegativo" />
+
+            <Button
+                android:id="@+id/buttonBrillo"
+                style="@style/FilterOutline"
+                android:text="@string/text_brillo"
+                app:layout_constraintEnd_toStartOf="@+id/buttonContraste"
+                app:layout_constraintStart_toEndOf="@+id/buttonGrises"
+                app:layout_constraintTop_toTopOf="@id/buttonGrises" />
+
+
+            <Button
+                android:id="@+id/buttonContraste"
+                style="@style/FilterOutline"
+                android:text="@string/text_contraste"
+                app:layout_constraintEnd_toStartOf="@+id/buttonGamma"
+                app:layout_constraintStart_toEndOf="@+id/buttonBrillo"
+                app:layout_constraintTop_toTopOf="@id/buttonBrillo" />
+
+            <Button
+                android:id="@+id/buttonGamma"
+                style="@style/FilterOutline"
+                android:text="@string/text_gama"
+                app:layout_constraintEnd_toStartOf="@+id/buttonRojo"
+                app:layout_constraintStart_toEndOf="@+id/buttonContraste"
+                app:layout_constraintTop_toTopOf="@id/buttonContraste" />
+
+            <Button
+                android:id="@+id/buttonRojo"
+                style="@style/FilterOutline"
+                android:text="@string/text_rojo"
+                app:layout_constraintEnd_toStartOf="@+id/buttonVerde"
+                app:layout_constraintStart_toEndOf="@+id/buttonGamma"
+                app:layout_constraintTop_toTopOf="@id/buttonGamma" />
+
+
+            <Button
+                android:id="@+id/buttonVerde"
+                style="@style/FilterOutline"
+                android:text="@string/text_verde"
+                app:layout_constraintEnd_toStartOf="@+id/buttonAzul"
+                app:layout_constraintStart_toEndOf="@+id/buttonRojo"
+                app:layout_constraintTop_toTopOf="@id/buttonRojo" />
+
+            <Button
+                android:id="@+id/buttonAzul"
+                style="@style/FilterOutline"
+                android:text="@string/text_azul"
+                app:layout_constraintEnd_toStartOf="@+id/buttonSmoothing"
+                app:layout_constraintStart_toEndOf="@+id/buttonVerde"
+                app:layout_constraintTop_toTopOf="@id/buttonVerde" />
+
+            <Button
+                android:id="@+id/buttonSmoothing"
+                style="@style/FilterOutline"
+                android:text="@string/button_smoothing"
+                app:layout_constraintEnd_toStartOf="@+id/buttonGaussianBlur"
+                app:layout_constraintStart_toEndOf="@+id/buttonAzul"
+                app:layout_constraintTop_toTopOf="@id/buttonAzul" />
+
+            <Button
+                android:id="@+id/buttonGaussianBlur"
+                style="@style/FilterOutline"
+                android:text="@string/button_gaussian_blur"
+                app:layout_constraintEnd_toStartOf="@+id/buttonSharpen"
+                app:layout_constraintStart_toEndOf="@+id/buttonSmoothing"
+                app:layout_constraintTop_toTopOf="@id/buttonSmoothing" />
+
+            <Button
+                android:id="@+id/buttonSharpen"
+                style="@style/FilterOutline"
+                android:text="@string/button_Sharpen"
+                app:layout_constraintEnd_toStartOf="@+id/buttonMeanRemoval"
+                app:layout_constraintStart_toEndOf="@+id/buttonGaussianBlur"
+                app:layout_constraintTop_toTopOf="@id/buttonGaussianBlur" />
+
+            <Button
+                android:id="@+id/buttonMeanRemoval"
+                style="@style/FilterOutline"
+                android:text="@string/button_mean_removal"
+                app:layout_constraintEnd_toStartOf="@+id/buttonEmbossing"
+                app:layout_constraintStart_toEndOf="@+id/buttonSharpen"
+                app:layout_constraintTop_toTopOf="@id/buttonSharpen" />
+
+            <Button
+                android:id="@+id/buttonEmbossing"
+                style="@style/FilterOutline"
+                android:text="@string/button_embossing"
+                app:layout_constraintEnd_toStartOf="@+id/buttonEdgeDetection"
+                app:layout_constraintStart_toEndOf="@+id/buttonMeanRemoval"
+                app:layout_constraintTop_toTopOf="@id/buttonMeanRemoval" />
+
+            <Button
+                android:id="@+id/buttonEdgeDetection"
+                style="@style/FilterOutline"
+                android:text="@string/button_edge_detection"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/buttonEmbossing"
+                app:layout_constraintTop_toTopOf="@id/buttonEmbossing" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </HorizontalScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

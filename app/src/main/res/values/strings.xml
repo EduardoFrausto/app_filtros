@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Filtros</string>
+    <string name="tomarFoto">Tomar Foto</string>
+    <string name="buscar_galeria">Buscar en galeria</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="text_negativo">Negativo</string>
+    <string name="text_grises">Escala de Grises</string>
+    <string name="text_brillo">Brillo</string>
+    <string name="text_contraste">Contraste</string>
+    <string name="text_gama">Gamma</string>
+    <string name="text_verde">Verde</string>
+    <string name="text_azul">Azul</string>
+    <string name="text_rojo">Rojo</string>
+    <string name="text_normal">Normal</string>
+    <string name="button_smoothing">Smoothing</string>
+    <string name="button_gaussian_blur">Gaussian Blur</string>
+    <string name="button_Sharpen" >Sharpen</string>
+    <string name="button_mean_removal">Mean Removal</string>
+    <string name="button_embossing">Embossing</string>
+    <string name="button_edge_detection">Edge Detection</string>
+</resources>
