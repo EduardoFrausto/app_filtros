@@ -59,6 +59,13 @@ class SelectFilterActivity : AppCompatActivity() {
                                 binding.imageView2.setImageBitmap(bitmapCopy)
                             }
                         }
+                        SMOOTHING, GAUSSIAN_BLUR, SHARPEN, MEAN_REMOVAL, EDGE_DETECTION, EMBOSSING -> {
+                            bitmapCopy =
+                                viewModel.applyConvultionFilter(_bitmapOriginal, filter)
+                            withContext(Dispatchers.Main) {
+                                binding.imageView2.setImageBitmap(bitmapCopy)
+                            }
+                        }
                         else -> {
                         }
                     }

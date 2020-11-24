@@ -1,11 +1,7 @@
 package com.example.filtros.viewModels
 
-import android.R.attr
-import android.R.attr.x
-import android.R.attr.y
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.filtros.filterView.Filter
 import com.example.filtros.models.PixelModel
@@ -122,6 +118,38 @@ class SelectActivityViewModel : ViewModel() {
         return bitmapCopy
     }
 
+    fun applyConvultionFilter(bitmap: Bitmap, filter: Filter): Bitmap {
+        return when (filter) {
+            Filter.SMOOTHING -> {
+                val convFilter = intArrayOf(1, 1, 1, 1, 1, 1, 1, 1, 1)
+                calculateMatrix(convFilter, bitmap)
+            }
+            Filter.GAUSSIAN_BLUR -> {
+                val convFilter = intArrayOf(1, 2, 1, 2, 4, 2, 1, 2, 1)
+                calculateMatrix(convFilter, bitmap, 16)
+            }
+            Filter.SHARPEN -> {
+                val convFilter = intArrayOf(0, -2, 0, -2, 11, -2, 0, -2, 0)
+                calculateMatrix(convFilter, bitmap)
+            }
+            Filter.MEAN_REMOVAL -> {
+                val convFilter = intArrayOf(-1, -1, -1, -1, 9, -1, -1, -1, -1)
+                calculateMatrix(convFilter, bitmap)
+            }
+            Filter.EMBOSSING -> {
+                val convFilter = intArrayOf(-1, 0, -1, 0, 4, 0, -1, 0, -1)
+                calculateMatrix(convFilter, bitmap, 1, 127)
+            }
+            Filter.EDGE_DETECTION -> {
+                val convFilter = intArrayOf(1, 1, 1, 0, 0, 0, -1, -1, -1)
+                calculateMatrix(convFilter, bitmap, 1, 127)
+            }
+            else -> {
+                bitmap
+            }
+        }
+    }
+
     private fun applyContrastToColor(value: Int, contrast: Float): Int {
         var newColor: Float = value.toFloat() / 255f
         newColor -= 0.5f
@@ -172,5 +200,69 @@ class SelectActivityViewModel : ViewModel() {
             value < 0 -> 0
             else -> value
         }
+    }
+
+    private fun calculateMatrix(
+        convFilter: IntArray,
+        bitmap: Bitmap,
+        factor: Int = convFilter.sum(),
+        offset: Int = 0
+    ): Bitmap {
+        val bitmapCopy: Bitmap = Bitmap.createBitmap(bitmap.width, bitmap.height, bitmap.config)
+        var pixel: Int
+        var red: Int
+        var green: Int
+        var blue: Int
+        var contador: Int
+        var weight: Int
+        for (i in 0 until bitmap.width - 1) {
+            for (j in 0 until bitmap.height - 1) {
+                blue = 0
+                green = 0
+                red = 0
+                contador = 0
+                for (x in i - 1..i + 1) {
+                    for (y in j - 1..j + 1) {
+                        pixel =
+                            when {
+                                x == -1 && (y == -1 || y == bitmap.height) || x == bitmap.width && (y == -1 || y == bitmap.height) -> bitmap.getPixel(
+                                    i,
+                                    j
+                                )
+                                x == -1 || x == bitmap.width -> bitmap.getPixel(i, y)
+                                y == -1 || y == bitmap.height -> bitmap.getPixel(x, j)
+                                else -> bitmap.getPixel(x, y)
+                            }
+                        weight = convFilter[contador]
+                        red += Color.red(pixel) * weight
+                        blue += Color.blue(pixel) * weight
+                        green += Color.green(pixel) * weight
+                        contador++
+                    }
+                }
+                when (factor) {
+                    0 -> {
+                        red += offset
+                        blue += offset
+                        green += offset
+                    }
+                    else -> {
+                        red = (red / factor) + offset
+                        blue = (blue / factor) + offset
+                        green = (green / factor) + offset
+                    }
+                }
+                bitmapCopy.setPixel(
+                    i,
+                    j,
+                    Color.rgb(
+                        checkRange(red),
+                        checkRange(green),
+                        checkRange(blue)
+                    )
+                )
+            }
+        }
+        return bitmapCopy
     }
 }
