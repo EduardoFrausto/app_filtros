@@ -18,4 +18,7 @@
     <string name="button_mean_removal">Mean Removal</string>
     <string name="button_embossing">Embossing</string>
     <string name="button_edge_detection">Edge Detection</string>
+    <string name="button_random_jitter">Random Jitter</string>
+    <string name="button_Sobell">Sobell</string>
+    <string name="button_Flip">Flip</string>
 </resources>

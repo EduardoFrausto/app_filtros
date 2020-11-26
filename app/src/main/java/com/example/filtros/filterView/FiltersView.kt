@@ -1,11 +1,8 @@
 package com.example.filtros.filterView
 
 import android.content.Context
-import android.content.res.ColorStateList
 import android.graphics.Color
-import android.opengl.Visibility
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
@@ -13,7 +10,6 @@ import android.widget.ScrollView
 import androidx.core.content.ContextCompat
 import com.example.filtros.R
 import com.example.filtros.filterView.Filter.*
-import com.google.android.material.slider.RangeSlider
 import com.google.android.material.slider.Slider
 
 class FiltersView : ScrollView {
@@ -33,6 +29,9 @@ class FiltersView : ScrollView {
     private lateinit var meanRemoval: Button
     private lateinit var embossing: Button
     private lateinit var edgeDetection: Button
+    private lateinit var randomJitter: Button
+    private lateinit var flip: Button
+    private lateinit var sobell: Button
 
     private lateinit var sliderRed: Slider
     private lateinit var sliderGreen: Slider
@@ -82,6 +81,9 @@ class FiltersView : ScrollView {
         meanRemoval = findViewById(R.id.buttonMeanRemoval)
         embossing = findViewById(R.id.buttonEmbossing)
         edgeDetection = findViewById(R.id.buttonEdgeDetection)
+        randomJitter = findViewById(R.id.buttonRandomJitter)
+        flip = findViewById(R.id.buttonFlip)
+        sobell = findViewById(R.id.buttonSobell)
         slider = findViewById(R.id.slider)
         sliderGreen = findViewById(R.id.greenSlider)
         sliderRed = findViewById(R.id.redSlider)
@@ -203,6 +205,21 @@ class FiltersView : ScrollView {
                 listener!!.onClick(EDGE_DETECTION)
                 changeStyle(it as Button)
             }
+            sobell.setOnClickListener {
+                configSlider()
+                listener!!.onClick(SOBELL)
+                changeStyle(it as Button)
+            }
+            flip.setOnClickListener {
+                configSlider()
+                listener!!.onClick(FLIP)
+                changeStyle(it as Button)
+            }
+            randomJitter.setOnClickListener {
+                configSlider()
+                listener!!.onClick(RANDOM_JITTER)
+                changeStyle(it as Button)
+            }
             slider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
                 override fun onStartTrackingTouch(slider: Slider) {}
                 override fun onStopTrackingTouch(slider: Slider) {
@@ -246,6 +263,12 @@ class FiltersView : ScrollView {
         meanRemoval.isEnabled = false
         embossing.isEnabled = false
         edgeDetection.isEnabled = false
+        sobell.isEnabled = false
+        flip.isEnabled = false
+        randomJitter.isEnabled = false
+        sliderRed.isEnabled = false
+        sliderGreen.isEnabled = false
+        sliderBlue.isEnabled = false
         slider.isEnabled = false
     }
 
@@ -265,6 +288,12 @@ class FiltersView : ScrollView {
         meanRemoval.isEnabled = true
         embossing.isEnabled = true
         edgeDetection.isEnabled = true
+        sobell.isEnabled = true
+        flip.isEnabled = true
+        randomJitter.isEnabled = true
+        sliderRed.isEnabled = true
+        sliderGreen.isEnabled = true
+        sliderBlue.isEnabled = true
         slider.isEnabled = true
     }
 
@@ -292,6 +321,9 @@ class FiltersView : ScrollView {
             MEAN_REMOVAL -> clearButtonStyle(meanRemoval)
             EMBOSSING -> clearButtonStyle(embossing)
             EDGE_DETECTION -> clearButtonStyle(edgeDetection)
+            FLIP -> clearButtonStyle(flip)
+            SOBELL -> clearButtonStyle(sobell)
+            RANDOM_JITTER -> clearButtonStyle(randomJitter)
         }
         changeSelected(button)
     }
@@ -318,6 +350,9 @@ class FiltersView : ScrollView {
             "Mean Removal" -> MEAN_REMOVAL
             "Embossing" -> EMBOSSING
             "Edge Detection" -> EDGE_DETECTION
+            "Flip" -> FLIP
+            "Sobell" -> SOBELL
+            "Random Jitter" -> RANDOM_JITTER
             else -> NORMAL
         }
     }

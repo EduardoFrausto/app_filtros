@@ -198,9 +198,39 @@
                 android:id="@+id/buttonEdgeDetection"
                 style="@style/FilterOutline"
                 android:text="@string/button_edge_detection"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/buttonSobell"
                 app:layout_constraintStart_toEndOf="@+id/buttonEmbossing"
                 app:layout_constraintTop_toTopOf="@id/buttonEmbossing" />
+
+            <Button
+                android:id="@+id/buttonSobell"
+                style="@style/FilterOutline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/button_Sobell"
+                app:layout_constraintEnd_toStartOf="@+id/buttonFlip"
+                app:layout_constraintStart_toEndOf="@+id/buttonEdgeDetection"
+                app:layout_constraintTop_toTopOf="@id/buttonEdgeDetection" />
+
+            <Button
+                android:id="@+id/buttonFlip"
+                style="@style/FilterOutline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/button_Flip"
+                app:layout_constraintEnd_toStartOf="@+id/buttonRandomJitter"
+                app:layout_constraintStart_toEndOf="@+id/buttonSobell"
+                app:layout_constraintTop_toTopOf="@id/buttonSobell" />
+
+            <Button
+                android:id="@+id/buttonRandomJitter"
+                style="@style/FilterOutline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/button_random_jitter"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/buttonFlip"
+                app:layout_constraintTop_toTopOf="@id/buttonSobell" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

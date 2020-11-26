@@ -38,7 +38,7 @@ class SelectFilterActivity : AppCompatActivity() {
                                 binding.imageView2.setImageBitmap(_bitmapOriginal)
                             }
                         }
-                        NEGATIVO, GRISES, ROJO, VERDE, AZUL -> {
+                        NEGATIVO, GRISES, ROJO, VERDE, AZUL, RANDOM_JITTER,FLIP -> {
                             bitmapCopy =
                                 viewModel.applyFilter(_bitmapOriginal, filter)
                             withContext(Dispatchers.Main) {
@@ -59,7 +59,7 @@ class SelectFilterActivity : AppCompatActivity() {
                                 binding.imageView2.setImageBitmap(bitmapCopy)
                             }
                         }
-                        SMOOTHING, GAUSSIAN_BLUR, SHARPEN, MEAN_REMOVAL, EDGE_DETECTION, EMBOSSING -> {
+                        SMOOTHING, GAUSSIAN_BLUR, SHARPEN, MEAN_REMOVAL, EDGE_DETECTION, EMBOSSING,SOBELL -> {
                             bitmapCopy =
                                 viewModel.applyConvultionFilter(_bitmapOriginal, filter)
                             withContext(Dispatchers.Main) {

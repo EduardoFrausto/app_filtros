@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import com.example.filtros.filterView.Filter
 import com.example.filtros.models.PixelModel
 import kotlin.math.pow
+import kotlin.math.sqrt
+import kotlin.random.Random
 
 
 class SelectActivityViewModel : ViewModel() {
@@ -16,7 +18,8 @@ class SelectActivityViewModel : ViewModel() {
 
     fun applyFilter(bitmap: Bitmap, filter: Filter, value: Float = 0f): Bitmap {
         var pixelModel: PixelModel
-        val bitmapCopy = Bitmap.createBitmap(bitmap.width, bitmap.height, bitmap.config)
+        //val bitmapCopy = Bitmap.createBitmap(bitmap.width, bitmap.height, bitmap.config)
+        val bitmapCopy = bitmap.copy(Bitmap.Config.ARGB_8888, true)
         for (i in 0 until bitmap.width) {
             for (j in 0 until bitmap.height) {
                 pixelModel = PixelModel.fromPixel(bitmap.getPixel(i, j))
@@ -110,6 +113,30 @@ class SelectActivityViewModel : ViewModel() {
                             )
                         )
                     }
+                    Filter.FLIP -> {
+                        bitmapCopy.setPixel(
+                            bitmap.width - (i + 1), j,
+                            Color.argb(
+                                pixelModel.alpha,
+                                pixelModel.red,
+                                pixelModel.green,
+                                pixelModel.blue,
+                            )
+                        )
+                    }
+                    Filter.RANDOM_JITTER -> {
+                        val offset = 2
+                        val rnd = Random.nextInt(-offset, offset)
+                        bitmapCopy.setPixel(
+                            checkXBound(rnd, i, bitmapCopy), checkYBound(rnd, j, bitmapCopy),
+                            Color.argb(
+                                pixelModel.alpha,
+                                pixelModel.red,
+                                pixelModel.green,
+                                pixelModel.blue,
+                            )
+                        )
+                    }
                     else -> {
                     }
                 }
@@ -143,6 +170,46 @@ class SelectActivityViewModel : ViewModel() {
             Filter.EDGE_DETECTION -> {
                 val convFilter = intArrayOf(1, 1, 1, 0, 0, 0, -1, -1, -1)
                 calculateMatrix(convFilter, bitmap, 1, 127)
+            }
+            Filter.SOBELL -> {
+                val vertical = intArrayOf(1, 2, 1, 0, 0, 0, -1, -2, -1)
+                val verticalMtx = calculateMatrix(vertical, bitmap, 1)
+                val horizontal = intArrayOf(1, 0, -1, 2, 0, -2, 1, 0, -1)
+                val horizontalMtx = calculateMatrix(horizontal, bitmap, 1)
+                val bitmapCopy = horizontalMtx.copy(Bitmap.Config.ARGB_8888, true)
+                for (x in 0 until bitmapCopy.width) {
+                    for (y in 0 until bitmapCopy.height) {
+                        val hPixelModel = PixelModel.fromPixel(horizontalMtx.getPixel(x, y))
+                        val vPixelModel = PixelModel.fromPixel(verticalMtx.getPixel(x, y))
+                        bitmapCopy.setPixel(
+                            x, y,
+                            Color.argb(
+                                hPixelModel.alpha,
+                                checkRange(
+                                    sqrt(
+                                        hPixelModel.red.toFloat().pow(2) + vPixelModel.red.toFloat()
+                                            .pow(2)
+                                    ).toInt()
+                                ),
+                                checkRange(
+                                    sqrt(
+                                        hPixelModel.green.toFloat()
+                                            .pow(2) + vPixelModel.green.toFloat()
+                                            .pow(2)
+                                    ).toInt()
+                                ),
+                                checkRange(
+                                    sqrt(
+                                        hPixelModel.blue.toFloat()
+                                            .pow(2) + vPixelModel.blue.toFloat()
+                                            .pow(2)
+                                    ).toInt()
+                                )
+                            )
+                        )
+                    }
+                }
+                bitmapCopy
             }
             else -> {
                 bitmap
@@ -264,5 +331,21 @@ class SelectActivityViewModel : ViewModel() {
             }
         }
         return bitmapCopy
+    }
+
+    private fun checkXBound(rnd: Int, x: Int, bitmap: Bitmap): Int {
+        return when {
+            x + rnd >= bitmap.width -> bitmap.width - 1
+            x + rnd < 0 -> 0
+            else -> x + rnd
+        }
+    }
+
+    private fun checkYBound(rnd: Int, y: Int, bitmap: Bitmap): Int {
+        return when {
+            y + rnd >= bitmap.height -> bitmap.height - 1
+            y + rnd < 0 -> 0
+            else -> y + rnd
+        }
     }
 }
