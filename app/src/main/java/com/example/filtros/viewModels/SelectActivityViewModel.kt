@@ -396,15 +396,17 @@ class SelectActivityViewModel : ViewModel() {
         }
         return generateBitmapOffset(bitmap, pt)
     }
+
     fun applyWaveFilter(bitmap: Bitmap): Bitmap {
         val pt: Array<Array<Point>> = Array(bitmap.width) { Array(bitmap.height) { Point(0, 0) } }
-var angulo = 0.0
+        var angulo = 0.0
         var x: Double
         var y: Double
         for (i in 0 until bitmap.width) for (j in 0 until bitmap.height) {
             angulo += 1.0
+            x = i.toDouble()
             pt[i][j].x = i
-            y = 20.0*sin(angulo/180.0*Math.PI)
+            y = 20.0 * sin(angulo / 180.0 * Math.PI)
             if (y > 0 && y < bitmap.height && x > 0 && x < bitmap.width) {
                 pt[i][j].y = y.toInt()
             } else {
