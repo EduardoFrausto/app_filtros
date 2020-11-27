@@ -1,19 +1,15 @@
 package com.example.filtros.activities
 
 import android.Manifest
-import android.app.Activity
 import android.content.ContentValues
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -30,11 +26,8 @@ import com.example.filtros.viewModels.SelectActivityViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
 import java.io.File
-import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.OutputStream
-import java.text.DateFormat.getDateInstance
-import java.text.SimpleDateFormat
 import java.util.*
 
 class SelectFilterActivity : AppCompatActivity() {
@@ -161,6 +154,14 @@ class SelectFilterActivity : AppCompatActivity() {
                         DISTORTION -> {
                             bitmapCopy =
                                 viewModel.applySphereFilter(_bitmapOriginal)
+                            _bitmapSave = bitmapCopy
+                            withContext(Dispatchers.Main) {
+                                binding.imageView2.setImageBitmap(bitmapCopy)
+                            }
+                        }
+                        PIXELATED -> {
+                            bitmapCopy =
+                                viewModel.applyWaveFilter(_bitmapOriginal)
                             _bitmapSave = bitmapCopy
                             withContext(Dispatchers.Main) {
                                 binding.imageView2.setImageBitmap(bitmapCopy)

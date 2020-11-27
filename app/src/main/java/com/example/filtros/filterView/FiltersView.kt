@@ -33,6 +33,7 @@ class FiltersView : ScrollView {
     private lateinit var flip: Button
     private lateinit var sobell: Button
     private lateinit var distortion: Button
+    private lateinit var final: Button
 
     private lateinit var sliderRed: Slider
     private lateinit var sliderGreen: Slider
@@ -86,6 +87,7 @@ class FiltersView : ScrollView {
         flip = findViewById(R.id.buttonFlip)
         sobell = findViewById(R.id.buttonSobell)
         distortion = findViewById(R.id.buttonDistortion)
+        final = findViewById(R.id.buttonPixelated)
         slider = findViewById(R.id.slider)
         sliderGreen = findViewById(R.id.greenSlider)
         sliderRed = findViewById(R.id.redSlider)
@@ -227,6 +229,11 @@ class FiltersView : ScrollView {
                 listener!!.onClick(DISTORTION)
                 changeStyle(it as Button)
             }
+            final.setOnClickListener {
+                configSlider()
+                listener!!.onClick(PIXELATED)
+                changeStyle(it as Button)
+            }
             slider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
                 override fun onStartTrackingTouch(slider: Slider) {}
                 override fun onStopTrackingTouch(slider: Slider) {
@@ -274,6 +281,7 @@ class FiltersView : ScrollView {
         flip.isEnabled = false
         randomJitter.isEnabled = false
         distortion.isEnabled = false
+        final.isEnabled = false
         sliderRed.isEnabled = false
         sliderGreen.isEnabled = false
         sliderBlue.isEnabled = false
@@ -300,6 +308,7 @@ class FiltersView : ScrollView {
         flip.isEnabled = true
         randomJitter.isEnabled = true
         distortion.isEnabled = true
+        final.isEnabled = true
         sliderRed.isEnabled = true
         sliderGreen.isEnabled = true
         sliderBlue.isEnabled = true
@@ -334,6 +343,7 @@ class FiltersView : ScrollView {
             SOBELL -> clearButtonStyle(sobell)
             RANDOM_JITTER -> clearButtonStyle(randomJitter)
             DISTORTION -> clearButtonStyle(distortion)
+            PIXELATED -> clearButtonStyle(final)
         }
         changeSelected(button)
     }
@@ -364,6 +374,7 @@ class FiltersView : ScrollView {
             "Sobell" -> SOBELL
             "Random Jitter" -> RANDOM_JITTER
             "Distortion" -> DISTORTION
+            "Pixelated" -> PIXELATED
             else -> NORMAL
         }
     }

@@ -20,4 +20,5 @@ enum class Filter() {
     FLIP,
     RANDOM_JITTER,
     DISTORTION,
+    PIXELATED
 }
