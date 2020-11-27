@@ -32,6 +32,7 @@ class FiltersView : ScrollView {
     private lateinit var randomJitter: Button
     private lateinit var flip: Button
     private lateinit var sobell: Button
+    private lateinit var distortion: Button
 
     private lateinit var sliderRed: Slider
     private lateinit var sliderGreen: Slider
@@ -84,6 +85,7 @@ class FiltersView : ScrollView {
         randomJitter = findViewById(R.id.buttonRandomJitter)
         flip = findViewById(R.id.buttonFlip)
         sobell = findViewById(R.id.buttonSobell)
+        distortion = findViewById(R.id.buttonDistortion)
         slider = findViewById(R.id.slider)
         sliderGreen = findViewById(R.id.greenSlider)
         sliderRed = findViewById(R.id.redSlider)
@@ -220,6 +222,11 @@ class FiltersView : ScrollView {
                 listener!!.onClick(RANDOM_JITTER)
                 changeStyle(it as Button)
             }
+            distortion.setOnClickListener {
+                configSlider()
+                listener!!.onClick(DISTORTION)
+                changeStyle(it as Button)
+            }
             slider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
                 override fun onStartTrackingTouch(slider: Slider) {}
                 override fun onStopTrackingTouch(slider: Slider) {
@@ -266,6 +273,7 @@ class FiltersView : ScrollView {
         sobell.isEnabled = false
         flip.isEnabled = false
         randomJitter.isEnabled = false
+        distortion.isEnabled = false
         sliderRed.isEnabled = false
         sliderGreen.isEnabled = false
         sliderBlue.isEnabled = false
@@ -291,6 +299,7 @@ class FiltersView : ScrollView {
         sobell.isEnabled = true
         flip.isEnabled = true
         randomJitter.isEnabled = true
+        distortion.isEnabled = true
         sliderRed.isEnabled = true
         sliderGreen.isEnabled = true
         sliderBlue.isEnabled = true
@@ -324,6 +333,7 @@ class FiltersView : ScrollView {
             FLIP -> clearButtonStyle(flip)
             SOBELL -> clearButtonStyle(sobell)
             RANDOM_JITTER -> clearButtonStyle(randomJitter)
+            DISTORTION -> clearButtonStyle(distortion)
         }
         changeSelected(button)
     }
@@ -353,6 +363,7 @@ class FiltersView : ScrollView {
             "Flip" -> FLIP
             "Sobell" -> SOBELL
             "Random Jitter" -> RANDOM_JITTER
+            "Distortion" -> DISTORTION
             else -> NORMAL
         }
     }

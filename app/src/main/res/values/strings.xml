@@ -21,4 +21,5 @@
     <string name="button_random_jitter">Random Jitter</string>
     <string name="button_Sobell">Sobell</string>
     <string name="button_Flip">Flip</string>
+    <string name="button_distortion">Distortion</string>
 </resources>

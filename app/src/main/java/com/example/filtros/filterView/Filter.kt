@@ -19,5 +19,5 @@ enum class Filter() {
     SOBELL,
     FLIP,
     RANDOM_JITTER,
-
+    DISTORTION,
 }

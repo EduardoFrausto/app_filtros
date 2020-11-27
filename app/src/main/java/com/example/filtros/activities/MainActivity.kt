@@ -21,7 +21,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private var _bitmap: Bitmap? = null
-
     private val viewModel: MainActivityViewModel by viewModels()
     private var showAccept = false
 

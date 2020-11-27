@@ -228,9 +228,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/button_random_jitter"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/buttonDistortion"
                 app:layout_constraintStart_toEndOf="@+id/buttonFlip"
                 app:layout_constraintTop_toTopOf="@id/buttonSobell" />
+
+            <Button
+                android:id="@+id/buttonDistortion"
+                style="@style/FilterOutline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/button_distortion"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/buttonRandomJitter"
+                tools:layout_editor_absoluteY="2dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

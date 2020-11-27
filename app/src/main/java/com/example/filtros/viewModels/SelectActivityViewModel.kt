@@ -2,11 +2,11 @@ package com.example.filtros.viewModels
 
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.Point
 import androidx.lifecycle.ViewModel
 import com.example.filtros.filterView.Filter
 import com.example.filtros.models.PixelModel
-import kotlin.math.pow
-import kotlin.math.sqrt
+import kotlin.math.*
 import kotlin.random.Random
 
 
@@ -15,6 +15,7 @@ class SelectActivityViewModel : ViewModel() {
     private val redGamma = IntArray(256)
     private val greenGamma = IntArray(256)
     private val blueGamma = IntArray(256)
+
 
     fun applyFilter(bitmap: Bitmap, filter: Filter, value: Float = 0f): Bitmap {
         var pixelModel: PixelModel
@@ -226,6 +227,7 @@ class SelectActivityViewModel : ViewModel() {
         return checkRange(newColor.toInt())
     }
 
+
     private fun setGammaChannels(red: Double, green: Double, blue: Double) {
         val redFixed = if (red != 0.0) red else 1.0
         val greenFixed = if (green != 0.0) green else 1.0
@@ -347,5 +349,69 @@ class SelectActivityViewModel : ViewModel() {
             y + rnd < 0 -> 0
             else -> y + rnd
         }
+    }
+
+    private fun generateBitmapOffset(bitmap: Bitmap, offset: Array<Array<Point>>): Bitmap {
+        val bitmapCopy = bitmap.copy(Bitmap.Config.ARGB_8888, true)
+        var xOffset: Int
+        var yOffset: Int
+        for (y in 0 until bitmap.height) {
+            for (x in 0 until bitmap.width) {
+                xOffset = offset[x][y].x
+                yOffset = offset[x][y].y
+                if (yOffset in 0 until bitmap.height && xOffset >= 0 && xOffset < bitmap.width) {
+                    bitmapCopy.setPixel(x, y, bitmap.getPixel(xOffset, yOffset))
+                }
+            }
+        }
+        return bitmapCopy
+    }
+
+    fun applySphereFilter(bitmap: Bitmap): Bitmap {
+        val pt: Array<Array<Point>> = Array(bitmap.width) { Array(bitmap.height) { Point(0, 0) } }
+        val tmp = Point()
+        tmp.x = bitmap.width / 2
+        tmp.y = bitmap.height / 2
+        var angulo: Double
+        var radio: Double
+        var x: Double
+        var y: Double
+        for (i in 0 until bitmap.width) for (j in 0 until bitmap.height) {
+            angulo = atan2((j - tmp.y).toDouble(), (i - tmp.x).toDouble())
+            radio = sqrt(((i - tmp.x) * (i - tmp.x) + (j - tmp.y) * (j - tmp.y)).toDouble())
+            x = tmp.x + radio * radio / tmp.x.coerceAtLeast(tmp.y) * cos(angulo)
+            if (x > 0 && x < bitmap.width) {
+                pt[i][j].x = x.toInt()
+            } else {
+                pt[i][j].x = 0
+                pt[i][j].y = 0
+            }
+            y = tmp.y + radio * radio / tmp.x.coerceAtLeast(tmp.y) * sin(angulo)
+            if (y > 0 && y < bitmap.height && x > 0 && x < bitmap.width) {
+                pt[i][j].y = y.toInt()
+            } else {
+                pt[i][j].y = 0
+                pt[i][j].x = pt[i][j].y
+            }
+        }
+        return generateBitmapOffset(bitmap, pt)
+    }
+    fun applyWaveFilter(bitmap: Bitmap): Bitmap {
+        val pt: Array<Array<Point>> = Array(bitmap.width) { Array(bitmap.height) { Point(0, 0) } }
+var angulo = 0.0
+        var x: Double
+        var y: Double
+        for (i in 0 until bitmap.width) for (j in 0 until bitmap.height) {
+            angulo += 1.0
+            pt[i][j].x = i
+            y = 20.0*sin(angulo/180.0*Math.PI)
+            if (y > 0 && y < bitmap.height && x > 0 && x < bitmap.width) {
+                pt[i][j].y = y.toInt()
+            } else {
+                pt[i][j].y = 0
+                pt[i][j].x = pt[i][j].y
+            }
+        }
+        return generateBitmapOffset(bitmap, pt)
     }
 }
