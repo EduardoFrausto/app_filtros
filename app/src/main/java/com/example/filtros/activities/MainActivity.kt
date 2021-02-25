@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.filtros.viewModels.MainActivityViewModel
 import com.example.filtros.R
 import com.example.filtros.databinding.ActivityMainBinding
+import com.example.filtros.models.ImageSingleton
 import com.google.android.material.snackbar.Snackbar
 
 
@@ -70,9 +71,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.accept -> {
-            val intent = Intent(this, SelectFilterActivity::class.java).apply {
-                putExtra("bitmap", _bitmap)
-            }
+            val intent = Intent(this, SelectFilterActivity::class.java)
+            ImageSingleton.image = _bitmap!!
             startActivity(intent)
             true
         }

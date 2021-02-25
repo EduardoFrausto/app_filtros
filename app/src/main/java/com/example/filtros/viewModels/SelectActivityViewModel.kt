@@ -16,7 +16,6 @@ class SelectActivityViewModel : ViewModel() {
     private val greenGamma = IntArray(256)
     private val blueGamma = IntArray(256)
 
-
     fun applyFilter(bitmap: Bitmap, filter: Filter, value: Float = 0f): Bitmap {
         var pixelModel: PixelModel
         //val bitmapCopy = Bitmap.createBitmap(bitmap.width, bitmap.height, bitmap.config)
@@ -397,10 +396,12 @@ class SelectActivityViewModel : ViewModel() {
         return generateBitmapOffset(bitmap, pt)
     }
 
-    fun applyWaveFilter(bitmap: Bitmap): Bitmap {
+    fun applyPixelatedFilter(bitmap: Bitmap): Bitmap {
         val pt: Array<Array<Point>> = Array(bitmap.width) { Array(bitmap.height) { Point(0, 0) } }
+        val width = bitmap.width - (bitmap.width % 5)
+        val height = bitmap.height - (bitmap.height % 5)
         val pixelSize = 5
-        for (i in 0 until bitmap.width step pixelSize) for (j in 0 until bitmap.height step pixelSize) {
+        for (i in 0 until width step pixelSize) for (j in 0 until height step pixelSize) {
             for (x in i until i + pixelSize) {
                 for (y in j until j + pixelSize) {
                     if (x < bitmap.width && j < bitmap.height) {

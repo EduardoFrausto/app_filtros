@@ -22,6 +22,7 @@ import com.example.filtros.databinding.ActivitySelectFilterBinding
 import com.example.filtros.filterView.Filter
 import com.example.filtros.filterView.Filter.*
 import com.example.filtros.filterView.FiltersView
+import com.example.filtros.models.ImageSingleton
 import com.example.filtros.viewModels.SelectActivityViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
@@ -103,7 +104,7 @@ class SelectFilterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySelectFilterBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        _bitmapOriginal = intent.getParcelableExtra("bitmap")!!
+        _bitmapOriginal = ImageSingleton.image
         _bitmapSave = _bitmapOriginal
         binding.imageView2.setImageBitmap(_bitmapOriginal)
         binding.filters.listener = object : FiltersView.FilterViewListener {
@@ -161,7 +162,7 @@ class SelectFilterActivity : AppCompatActivity() {
                         }
                         PIXELATED -> {
                             bitmapCopy =
-                                viewModel.applyWaveFilter(_bitmapOriginal)
+                                viewModel.applyPixelatedFilter(_bitmapOriginal)
                             _bitmapSave = bitmapCopy
                             withContext(Dispatchers.Main) {
                                 binding.imageView2.setImageBitmap(bitmapCopy)
